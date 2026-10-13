@@ -7,12 +7,15 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout source
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Set up Java 21
@@ -20,18 +23,29 @@ jobs:
         with:
           distribution: temurin
           java-version: "21"
+          cache: gradle
+
+      - name: Check project files
+        run: |
+          echo "Checking project files..."
+          test -f build.gradle || (echo "Missing build.gradle" && exit 1)
+          test -f settings.gradle || (echo "Missing settings.gradle" && exit 1)
+          test -d src || (echo "Missing src folder" && exit 1)
+          echo "Project files found."
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: "9.2.1"
+          gradle-version: "8.14.3"
 
       - name: Build mod
-        run: gradle build --no-daemon
+        run: gradle build --no-daemon --stacktrace
 
       - name: Upload JAR
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: DonutHelper-JAR
           path: build/libs/*.jar
           if-no-files-found: error
+
