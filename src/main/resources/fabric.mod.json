@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "donuthelper",
+  "version": "${version}",
+  "name": "DonutHelper",
+  "description": "Client-side balance HUD, profit calculator, and item price tracker.",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "dev.example.donuthelper.DonutHelperClient"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.18.0",
+    "minecraft": "~1.21.11",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}
